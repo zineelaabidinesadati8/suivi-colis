@@ -3,6 +3,8 @@ import { Package, Truck, CheckCircle, RotateCcw } from 'lucide-react';
 import ColisService from '../services/ColisService';
 import StatCard from '../components/dashboard/StatCard';
 import RecentColis from '../components/dashboard/RecentColis';
+import DonutStatuts from '../components/dashboard/DonutStatuts';
+import TopVilles from '../components/dashboard/TopVilles';
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -26,6 +28,11 @@ export default function Dashboard() {
         <StatCard titre="En transit" valeur={stats.parStatut['En transit']} icone={Truck} couleur="violet" />
         <StatCard titre="Livrés" valeur={stats.parStatut['Livré']} icone={CheckCircle} couleur="vert" />
         <StatCard titre="Retournés" valeur={stats.parStatut['Retourné']} icone={RotateCcw} couleur="rose" />
+      </div>
+
+      <div className="dashboard-grille">
+        <DonutStatuts parStatut={stats.parStatut} total={stats.total} />
+        <TopVilles parVille={stats.parVille} />
       </div>
 
       <RecentColis colis={recents} />

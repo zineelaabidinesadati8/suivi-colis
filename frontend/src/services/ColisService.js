@@ -117,6 +117,7 @@ class ColisService {
     return {
       total,
       parStatut,
+      parVille: villes,
       poidsMoyen: total > 0 ? Math.round((poidsTotal / total) * 100) / 100 : 0,
       villePlusFrequente,
     };

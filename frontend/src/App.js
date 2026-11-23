@@ -1,7 +1,9 @@
-import Dashboard from './pages/Dashboard';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import './App.css';
+import Dashboard from './pages/Dashboard';
+import Colis from './pages/Colis';
+import FormulaireColis from './components/FormulaireColis';
 
 const utilisateur = { nom: 'Admin Test', role: 'admin' };
 
@@ -21,7 +23,9 @@ function App() {
         <Route element={<Layout utilisateur={utilisateur} />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/colis" element={<Page titre="Colis" />} />
+          <Route path="/colis" element={<Colis />} />
+          <Route path="/colis/nouveau" element={<FormulaireColis />} />
+          <Route path="/colis/:id/modifier" element={<FormulaireColis />} />
           <Route path="/livraisons" element={<Page titre="Mes livraisons" />} />
           <Route path="/suivi" element={<Page titre="Suivi" />} />
           <Route path="/utilisateurs" element={<Page titre="Utilisateurs" />} />
