@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import { Search, Bell } from 'lucide-react';
 
-export default function Header({ utilisateur }) {
+export default function Header({ utilisateur , nbNonLues }) {
   return (
     <header className="header">
       <div>
@@ -13,10 +14,10 @@ export default function Header({ utilisateur }) {
           <Search size={18} />
           <input type="text" placeholder="Rechercher..." />
         </div>
-        <button className="icone-btn" aria-label="Notifications">
+        <Link to="/notifications" className="icone-btn" aria-label="Notifications">
           <Bell size={20} />
-          <span className="badge">3</span>
-        </button>
+          {nbNonLues > 0 && <span className="badge">{nbNonLues}</span>}
+        </Link>
       </div>
     </header>
   );

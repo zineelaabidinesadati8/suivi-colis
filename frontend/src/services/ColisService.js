@@ -6,22 +6,29 @@ class ColisService {
     this.historique = [];
     this.nextId = 1;
     this.nextHistoriqueId = 1;
-    this.livreurs = [
-      { id: 2, nom: 'Hamza Alaoui' },
-      { id: 3, nom: 'Samira Idrissi' },
+    this.utilisateurs = [
+      { id: 1, nom: 'Admin Test', email: 'admin@suivicolis.ma', role: 'admin' },
+      { id: 2, nom: 'Hamza Alaoui', email: 'hamza@suivicolis.ma', role: 'livreur' },
+      { id: 3, nom: 'Samira Idrissi', email: 'samira@suivicolis.ma', role: 'livreur' },
+      { id: 4, nom: 'Amal Jamali', email: 'amal@example.com', role: 'client' },
+      { id: 5, nom: 'Karim Fasski', email: 'karim@example.com', role: 'client' },
     ];
+    this.notifications = [];
+    this.nextNotifId = 1;
     this.initialiserDonnees();
   }
 
   initialiserDonnees() {
     const exemples = [
-      { expediteur: 'Jumia Maroc', destinataire: 'Amal Jamali', adresse: '12 Rue Hassan II', ville: 'Agadir', poids: 1.5, statut_actuel: 'En transit', livreur_id: 2 },
-      { expediteur: 'Marjane', destinataire: 'Karim Fasski', adresse: '45 Bd Zerktouni', ville: 'Casablanca', poids: 4.2, statut_actuel: 'En livraison', livreur_id: 2 },
+      { expediteur: 'Jumia Maroc', destinataire: 'Amal Jamali', adresse: '12 Rue Hassan II', ville: 'Agadir', poids: 1.5, statut_actuel: 'En transit', livreur_id: 2 , client_id: 4 },
+      { expediteur: 'Marjane', destinataire: 'Karim Fasski', adresse: '45 Bd Zerktouni', ville: 'Casablanca', poids: 4.2, statut_actuel: 'En livraison', livreur_id: 2 , client_id: 5 },
       { expediteur: 'Decathlon', destinataire: 'Nawal Ibrahimi', adresse: '8 Av Mohammed V', ville: 'Marrakech', poids: 2.8, statut_actuel: 'Livré', livreur_id: 3 },
       { expediteur: 'Amazon', destinataire: 'Youssef Manad', adresse: '3 Rue des Orangers', ville: 'Rabat', poids: 0.7 },
       { expediteur: 'Electroplanet', destinataire: 'Samira Ait Kaba', adresse: '21 Rue Founty', ville: 'Agadir', poids: 6.0, statut_actuel: 'Retourné', livreur_id: 3 },
     ];
     exemples.forEach(e => this.creer(e));
+    this.ajouterNotification(this.colis[1], 'Le colis est en cours de livraison');
+    this.ajouterNotification(this.colis[2], 'Le colis a été livré');
   }
 
   creer(data) {
@@ -49,7 +56,9 @@ class ColisService {
 
   // CREATE
   async ajouterColis(data) {
-    return this.creer(data);
+    const colis = this.creer(data);
+    this.ajouterNotification(colis, 'Nouveau colis enregistré');
+    return colis;
   }
 
   // READ
@@ -98,6 +107,7 @@ class ColisService {
     if (!colis) return null;
     colis.statut_actuel = nouveauStatut;
     this.ajouterHistorique(id, nouveauStatut, commentaire);
+    this.ajouterNotification(colis, `Nouveau statut : ${nouveauStatut}`);
     return colis;
   }
 
@@ -106,22 +116,66 @@ class ColisService {
     const index = this.colis.findIndex(c => c.id === id);
     if (index === -1) return null;
     this.historique = this.historique.filter(h => h.colis_id !== id);
+    this.notifications = this.notifications.filter(n => n.colis_id !== id);
     return this.colis.splice(index, 1)[0];
   }
 
   async getLivreurs() {
-    return [...this.livreurs];
+    return this.utilisateurs.filter(u => u.role === 'livreur');
   }
 
   async affecterLivreur(id, livreur_id) {
     const colis = this.colis.find(c => c.id === id);
     if (!colis) return null;
     colis.livreur_id = livreur_id;
-    const livreur = this.livreurs.find(l => l.id === livreur_id);
+    const livreur = this.utilisateurs.find(u => u.id === livreur_id);
     this.ajouterHistorique(id, colis.statut_actuel, livreur ? `Affecté à ${livreur.nom}` : 'Livreur retiré');
     return colis;
   }
 
+  ajouterNotification(colis, message) {
+    this.notifications.push({
+      id: this.nextNotifId++,
+      colis_id: colis.id,
+      numero_suivi: colis.numero_suivi,
+      message,
+      lu: false,
+      created_at: new Date().toISOString(),
+    });
+  }
+
+  async getNotifications(utilisateur) {
+    return this.notifications
+      .filter(n => {
+        if (utilisateur.role === 'admin') return true;
+        const c = this.colis.find(x => x.id === n.colis_id);
+        if (!c) return false;
+        return utilisateur.role === 'livreur'
+          ? c.livreur_id === utilisateur.id
+          : c.client_id === utilisateur.id;
+      })
+      .reverse();
+  }
+
+  async marquerLue(id) {
+    const n = this.notifications.find(x => x.id === id);
+    if (n) n.lu = true;
+  }
+
+  async marquerToutesLues(ids) {
+    this.notifications.forEach(n => {
+      if (ids.includes(n.id)) n.lu = true;
+    });
+  }
+
+  async compterNonLues(utilisateur) {
+    const liste = await this.getNotifications(utilisateur);
+    return liste.filter(n => !n.lu).length;
+  }
+
+  async getUtilisateurs() {
+    return [...this.utilisateurs];
+  }
 
   // Statistiques
   async getStatistiques() {

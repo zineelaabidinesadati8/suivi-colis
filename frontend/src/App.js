@@ -6,17 +6,11 @@ import Colis from './pages/Colis';
 import FormulaireColis from './components/FormulaireColis';
 import DetailColis from './pages/DetailColis';
 import Suivi from './pages/Suivi';
+import Notifications from './pages/Notifications';
+import Utilisateurs from './pages/Utilisateurs';
 
 const utilisateur = { id: 1, nom: 'Admin Test', role: 'admin' };
 
-function Page({ titre }) {
-  return (
-    <div className="carte">
-      <h2>{titre}</h2>
-      <p>Page en construction</p>
-    </div>
-  );
-}
 
 function App() {
   return (
@@ -31,8 +25,8 @@ function App() {
           <Route path="/colis/:id/modifier" element={<FormulaireColis />} />
           <Route path="/livraisons" element={<Colis utilisateur={utilisateur} />} />
           <Route path="/suivi" element={<Suivi />} />
-          <Route path="/utilisateurs" element={<Page titre="Utilisateurs" />} />
-          <Route path="/notifications" element={<Page titre="Notifications" />} />
+          <Route path="/utilisateurs" element={<Utilisateurs />} />
+          <Route path="/notifications" element={<Notifications utilisateur={utilisateur} />} />
         </Route>
       </Routes>
     </BrowserRouter>
