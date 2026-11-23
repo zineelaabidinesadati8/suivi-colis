@@ -75,6 +75,12 @@ class ColisService {
     );
   }
 
+  async getColisParNumero(numero) {
+    return this.colis.find(
+      c => c.numero_suivi.toLowerCase() === numero.trim().toLowerCase()
+    );
+  }
+
   // UPDATE
   async modifierColis(id, donnees) {
     const index = this.colis.findIndex(c => c.id === id);
