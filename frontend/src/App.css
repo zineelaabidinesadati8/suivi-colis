@@ -28,3 +28,30 @@ nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .badge { position: absolute; top: -4px; right: -4px; background: #4f46e5; color: #fff; font-size: 11px; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
 
 .carte { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 2px 10px rgba(30, 27, 75, 0.06); }
+
+.stats-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.stat-card { display: flex; align-items: center; gap: 16px; }
+.stat-icone { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #fff; }
+.stat-icone.bleu { background: #3b82f6; }
+.stat-icone.violet { background: #8b5cf6; }
+.stat-icone.vert { background: #22c55e; }
+.stat-icone.rose { background: #ec4899; }
+.stat-titre { font-size: 14px; color: #64748b; }
+.stat-valeur { font-size: 1.8rem; font-weight: 700; }
+
+.carte-titre { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.carte-titre h3 { margin: 0; }
+.carte-titre a { color: #4f46e5; text-decoration: none; font-size: 14px; }
+
+.liste-recents { list-style: none; margin: 0; padding: 0; }
+.liste-recents li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #f0f1f7; }
+.liste-recents li:last-child { border-bottom: none; }
+.liste-recents strong { display: block; }
+.liste-recents span { font-size: 13px; color: #64748b; }
+
+.statut { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.statut-gris { background: #f1f5f9; color: #475569; }
+.statut-bleu { background: #e0ecff; color: #1d4ed8; }
+.statut-violet { background: #ede9fe; color: #6d28d9; }
+.statut-vert { background: #dcfce7; color: #15803d; }
+.statut-rouge { background: #fee2e2; color: #b91c1c; }

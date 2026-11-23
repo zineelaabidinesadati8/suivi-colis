@@ -1,3 +1,4 @@
+import Dashboard from './pages/Dashboard';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import './App.css';
@@ -19,7 +20,7 @@ function App() {
       <Routes>
         <Route element={<Layout utilisateur={utilisateur} />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Page titre="Tableau de bord" />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/colis" element={<Page titre="Colis" />} />
           <Route path="/livraisons" element={<Page titre="Mes livraisons" />} />
           <Route path="/suivi" element={<Page titre="Suivi" />} />
