@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Search, Plus, Pencil, Trash2, Eye } from 'lucide-react';
 import ColisService from '../services/ColisService';
 import StatutBadge from '../components/StatutBadge';
 import { STATUTS } from '../models/Colis';
 
 const PAR_PAGE = 4;
 
-export default function Colis() {
+export default function Colis({ utilisateur }) {
+  const estAdmin = utilisateur.role === 'admin';
   const [colis, setColis] = useState([]);
   const [recherche, setRecherche] = useState('');
   const [filtreStatut, setFiltreStatut] = useState('');
@@ -15,10 +16,15 @@ export default function Colis() {
 
   useEffect(() => {
     const charger = async () => {
-      setColis(await ColisService.getTousColis());
+      const tous = await ColisService.getTousColis();
+      setColis(
+        utilisateur.role === 'livreur'
+          ? tous.filter(c => c.livreur_id === utilisateur.id)
+          : tous
+      );
     };
     charger();
-  }, []);
+  }, [utilisateur]);
 
   const terme = recherche.toLowerCase();
   const filtres = colis.filter(c => {
@@ -55,10 +61,14 @@ export default function Colis() {
   return (
     <div className="carte">
       <div className="carte-titre">
-        <h3>Liste des colis ({filtres.length})</h3>
-        <Link to="/colis/nouveau" className="btn-primaire">
-          <Plus size={18} /> Nouveau colis
-        </Link>
+        <h3>
+          {utilisateur.role === 'livreur' ? 'Mes livraisons' : 'Liste des colis'} ({filtres.length})
+        </h3>
+        {estAdmin && (
+          <Link to="/colis/nouveau" className="btn-primaire">
+            <Plus size={18} /> Nouveau colis
+          </Link>
+        )}
       </div>
 
       <div className="barre-outils">
@@ -108,12 +118,19 @@ export default function Colis() {
                   <td>{new Date(c.created_at).toLocaleDateString('fr-FR')}</td>
                   <td>
                     <div className="actions">
-                      <Link to={`/colis/${c.id}/modifier`} className="btn-icone" title="Modifier">
-                        <Pencil size={16} />
+                      <Link to={`/colis/${c.id}`} className="btn-icone" title="Détails">
+                        <Eye size={16} />
                       </Link>
-                      <button className="btn-icone danger" title="Supprimer" onClick={() => supprimer(c)}>
-                        <Trash2 size={16} />
-                      </button>
+                      {estAdmin && (
+                        <>
+                          <Link to={`/colis/${c.id}/modifier`} className="btn-icone" title="Modifier">
+                            <Pencil size={16} />
+                          </Link>
+                          <button className="btn-icone danger" title="Supprimer" onClick={() => supprimer(c)}>
+                            <Trash2 size={16} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

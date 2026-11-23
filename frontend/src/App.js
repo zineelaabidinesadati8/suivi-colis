@@ -4,8 +4,9 @@ import './App.css';
 import Dashboard from './pages/Dashboard';
 import Colis from './pages/Colis';
 import FormulaireColis from './components/FormulaireColis';
+import DetailColis from './pages/DetailColis';
 
-const utilisateur = { nom: 'Admin Test', role: 'admin' };
+const utilisateur = { id: 1, nom: 'Admin Test', role: 'admin' };
 
 function Page({ titre }) {
   return (
@@ -23,10 +24,11 @@ function App() {
         <Route element={<Layout utilisateur={utilisateur} />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/colis" element={<Colis />} />
+          <Route path="/colis" element={<Colis utilisateur={utilisateur} />} />
           <Route path="/colis/nouveau" element={<FormulaireColis />} />
+          <Route path="/colis/:id" element={<DetailColis utilisateur={utilisateur} />} />
           <Route path="/colis/:id/modifier" element={<FormulaireColis />} />
-          <Route path="/livraisons" element={<Page titre="Mes livraisons" />} />
+          <Route path="/livraisons" element={<Colis utilisateur={utilisateur} />} />
           <Route path="/suivi" element={<Page titre="Suivi" />} />
           <Route path="/utilisateurs" element={<Page titre="Utilisateurs" />} />
           <Route path="/notifications" element={<Page titre="Notifications" />} />

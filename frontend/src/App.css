@@ -112,3 +112,28 @@ nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .champ input.invalide { border-color: #ef4444; }
 .erreur { color: #b91c1c; font-size: 13px; }
 .formulaire-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid #f0f1f7; }
+
+.lien-retour { display: inline-block; margin-bottom: 16px; color: #4f46e5; text-decoration: none; font-size: 14px; }
+.carte h4 { margin: 0 0 12px; }
+.carte h4:not(:first-child) { margin-top: 24px; }
+
+.detail-grille { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+@media (max-width: 900px) { .detail-grille { grid-template-columns: 1fr; } }
+.infos { list-style: none; margin: 0; padding: 0; }
+.infos li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f1f7; font-size: 14px; }
+.infos li:last-child { border-bottom: none; }
+.infos span { color: #64748b; }
+
+.form-statut { display: flex; flex-direction: column; gap: 12px; }
+.form-statut select, .form-statut textarea { padding: 10px 14px; border: 2px solid #e2e5f1; border-radius: 10px; font-size: 14px; font-family: inherit; outline: none; }
+.form-statut select:focus, .form-statut textarea:focus { border-color: #4f46e5; }
+.form-statut .btn-primaire { align-self: flex-start; }
+
+.timeline { list-style: none; margin: 16px 0 0; padding: 0 0 0 14px; border-left: 2px solid #e2e5f1; }
+.timeline li { position: relative; padding: 0 0 20px 16px; }
+.timeline li:last-child { padding-bottom: 0; }
+.timeline-point { position: absolute; left: -21px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #4f46e5; border: 2px solid #fff; }
+.timeline li:first-child .timeline-point { box-shadow: 0 0 0 4px #e0e7ff; }
+.timeline strong { display: block; }
+.timeline p { margin: 2px 0; color: #475569; font-size: 14px; }
+.timeline small { color: #94a3b8; }

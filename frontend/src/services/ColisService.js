@@ -6,16 +6,20 @@ class ColisService {
     this.historique = [];
     this.nextId = 1;
     this.nextHistoriqueId = 1;
+    this.livreurs = [
+      { id: 2, nom: 'Hamza Alaoui' },
+      { id: 3, nom: 'Samira Idrissi' },
+    ];
     this.initialiserDonnees();
   }
 
   initialiserDonnees() {
     const exemples = [
-      { expediteur: 'Jumia Maroc', destinataire: 'Amal Jamali', adresse: '12 Rue Hassan II', ville: 'Agadir', poids: 1.5, statut_actuel: 'En transit' },
-      { expediteur: 'Marjane', destinataire: 'Karim Fasski', adresse: '45 Bd Zerktouni', ville: 'Casablanca', poids: 4.2, statut_actuel: 'En livraison' },
-      { expediteur: 'Decathlon', destinataire: 'Nawal Ibrahimi', adresse: '8 Av Mohammed V', ville: 'Marrakech', poids: 2.8, statut_actuel: 'Livré' },
+      { expediteur: 'Jumia Maroc', destinataire: 'Amal Jamali', adresse: '12 Rue Hassan II', ville: 'Agadir', poids: 1.5, statut_actuel: 'En transit', livreur_id: 2 },
+      { expediteur: 'Marjane', destinataire: 'Karim Fasski', adresse: '45 Bd Zerktouni', ville: 'Casablanca', poids: 4.2, statut_actuel: 'En livraison', livreur_id: 2 },
+      { expediteur: 'Decathlon', destinataire: 'Nawal Ibrahimi', adresse: '8 Av Mohammed V', ville: 'Marrakech', poids: 2.8, statut_actuel: 'Livré', livreur_id: 3 },
       { expediteur: 'Amazon', destinataire: 'Youssef Manad', adresse: '3 Rue des Orangers', ville: 'Rabat', poids: 0.7 },
-      { expediteur: 'Electroplanet', destinataire: 'Samira Ait Kaba', adresse: '21 Rue Founty', ville: 'Agadir', poids: 6.0, statut_actuel: 'Retourné' },
+      { expediteur: 'Electroplanet', destinataire: 'Samira Ait Kaba', adresse: '21 Rue Founty', ville: 'Agadir', poids: 6.0, statut_actuel: 'Retourné', livreur_id: 3 },
     ];
     exemples.forEach(e => this.creer(e));
   }
@@ -26,7 +30,7 @@ class ColisService {
     const colis = new Colis(
       id, numero, data.expediteur, data.destinataire,
       data.adresse, data.ville, Number(data.poids),
-      data.statut_actuel || 'En attente', data.client_id || null
+      data.statut_actuel || 'En attente', data.client_id || null, data.livreur_id || null
     );
     this.colis.push(colis);
     this.ajouterHistorique(id, colis.statut_actuel, 'Colis enregistré');
@@ -98,6 +102,20 @@ class ColisService {
     this.historique = this.historique.filter(h => h.colis_id !== id);
     return this.colis.splice(index, 1)[0];
   }
+
+  async getLivreurs() {
+    return [...this.livreurs];
+  }
+
+  async affecterLivreur(id, livreur_id) {
+    const colis = this.colis.find(c => c.id === id);
+    if (!colis) return null;
+    colis.livreur_id = livreur_id;
+    const livreur = this.livreurs.find(l => l.id === livreur_id);
+    this.ajouterHistorique(id, colis.statut_actuel, livreur ? `Affecté à ${livreur.nom}` : 'Livreur retiré');
+    return colis;
+  }
+
 
   // Statistiques
   async getStatistiques() {

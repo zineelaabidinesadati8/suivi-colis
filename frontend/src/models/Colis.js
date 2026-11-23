@@ -1,7 +1,7 @@
 export const STATUTS = ['En attente', 'En transit', 'En livraison', 'Livré', 'Retourné'];
 
 class Colis {
-  constructor(id, numero_suivi, expediteur, destinataire, adresse, ville, poids, statut_actuel = 'En attente', client_id = null) {
+  constructor(id, numero_suivi, expediteur, destinataire, adresse, ville, poids, statut_actuel = 'En attente', client_id = null , livreur_id = null) {
     this.id = id;
     this.numero_suivi = numero_suivi;
     this.expediteur = expediteur;
@@ -11,6 +11,9 @@ class Colis {
     this.poids = poids;
     this.statut_actuel = statut_actuel;
     this.client_id = client_id;
+    this.created_at = new Date().toISOString();
+    this.client_id = client_id;
+    this.livreur_id = livreur_id;
     this.created_at = new Date().toISOString();
   }
 }
