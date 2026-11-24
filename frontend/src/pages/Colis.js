@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Search, Plus, Pencil, Trash2, Eye } from 'lucide-react';
 import ColisService from '../services/ColisService';
 import StatutBadge from '../components/StatutBadge';
@@ -10,7 +10,8 @@ const PAR_PAGE = 4;
 export default function Colis({ utilisateur }) {
   const estAdmin = utilisateur.role === 'admin';
   const [colis, setColis] = useState([]);
-  const [recherche, setRecherche] = useState('');
+  const [params] = useSearchParams();
+  const [recherche, setRecherche] = useState(params.get('q') || '');
   const [filtreStatut, setFiltreStatut] = useState('');
   const [page, setPage] = useState(1);
 
@@ -25,6 +26,11 @@ export default function Colis({ utilisateur }) {
     };
     charger();
   }, [utilisateur]);
+
+  useEffect(() => {
+    setRecherche(params.get('q') || '');
+    setPage(1);
+  }, [params]);
 
   const terme = recherche.toLowerCase();
   const filtres = colis.filter(c => {
